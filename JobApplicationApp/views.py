@@ -244,7 +244,12 @@ def references_super(request, post_form):
 def basic_submit(request):
     form = forms.BasicModelFrom(request.POST)
     if basic_super(request, form):
-        return redirect("education")
+        if "education" in request.session and len(request.session["education"]): 
+            data = request.session["education"]
+            context = {"education": data, "backid": True}
+            return render(request, "education.html", context)
+        else:
+            return redirect("education")
     else:
         return render(request, "basic.html", {'basic': form})
 
@@ -252,7 +257,12 @@ def basic_submit(request):
 def education_submit(request):
     form = forms.EducationForm(request.POST)
     if education_super(request, form):
-        return redirect("workexprience")
+        if "workexprience" in request.session and len(request.session["workexprience"]): 
+            data = request.session["workexprience"]
+            context = {"exprience": data, "backid": True}
+            return render(request, "exprience.html", context)
+        else:
+            return redirect("workexprience")
     else:
         return render(request, "education.html", {'education': form})
     
@@ -260,7 +270,12 @@ def education_submit(request):
 def workexprience_submit(request):
     form = forms.WorkExperienceFrom(request.POST)
     if workexperience_super(request, form):
-        return redirect("languages")
+        if "language" in request.session and len(request.session["language"]): 
+            data = request.session["language"]
+            context = {"language": data, "backid": True}
+            return render(request, "language.html", context)
+        else:
+            return redirect("languages")
     else:
         return render(request, "education.html", {'education': form})
     
@@ -271,6 +286,12 @@ def languages_submit(request):
         request.session["language"] = form.cleaned_data
         print(request.session["language"], "language")
 
+    if "technology" in request.session and len(request.session["technology"]): 
+        # request.session["language"] = form.data
+        data = request.session["technology"]
+        context = {"technology": data, "backid": True}
+        return render(request, "technology.html", context)
+    
     return redirect("technology")
 
 
@@ -279,6 +300,7 @@ def techonology_submit(request):
     if form.is_valid():
         request.session["technology"] = form.cleaned_data
         print(request.session["technology"], "technology")
+    
     return redirect("reference")
 
 
@@ -544,20 +566,17 @@ def preference_update_data(request, id):
         def update_db(lan, alang, ability, lid):
             if lan == alang and ability == "isread":
                 LanguagesKnown.objects.filter(form_id=id, id=lid, langauage=lan).update(isread=True)
-                print(ability, " languages")
             if lan == alang and ability == "iswrite":
                 LanguagesKnown.objects.filter(form_id=id, id=lid, langauage=lan).update(iswrite=True)
-                print(ability, " languages2")
             if lan == alang and ability == "isspeak":
                 LanguagesKnown.objects.filter(form_id=id, id=lid, langauage=lan).update(isspeak=True)
-                print(ability, " languages3")
         
         for lid in langli["id"]:
             LanguagesKnown.objects.filter(form_id=id, id=lid).update(isspeak=False, iswrite=False, isread=False)
             for key in langli:
                 if "_" in key:
                     [ability, lan] = key.split("_")
-                    if lan == "gujarati":
+                    if lan.lower() == "gujarati":
                         update_db(lan, "gujarati", ability, lid)
 
                     if lan == "english":
@@ -567,6 +586,11 @@ def preference_update_data(request, id):
                         update_db(lan, "hindi", ability, lid)
     
         Preferences.objects.filter(form_id=id).update(pref_location=pref["pref_location"], notice_period=pref["notice_period"], department=pref["department"], expected_ctc=pref["expected_ctc"], actual_ctc=pref["actual_ctc"])
+
+        sessionvar = ("basic_details", "education", "workexprience",
+                        "language", "technology", "references", "preference")
+        for sess in sessionvar:
+            del request.session[sess]
 
     return redirect("home")
 
@@ -619,24 +643,40 @@ def delete(request, userid, id):
 
 def basic_back(request):
     data = request.session["basic_details"]
-    print(data)
-    return super_rendering_function(request, "basic", forms.BasicModelFrom, "basic.html")
-    # return render(request, "basic.html")
+    return super_rendering_function(request, "basic", forms.BasicModelFrom(initial=data), "basic.html")
+    
 
-def education_back(request, id):
-    pass
+def education_back(request):
+    data = request.session["education"]
+    context = {"education": data, "backid": 1}
+    return render(request, "education.html", context)
+    
 
-def exprience_back(request, id):
-    pass
+def exprience_back(request):
+    data = request.session["workexprience"]
+    context = { "exprience": data, "backid":1 }
+    return render(request, "exprience.html", context)
+    
 
-def langauge_back(request, id):
-    pass
+def langauge_back(request):
+    data = request.session["language"]
+    context = { "language": data, "backid":1 }
+    return render(request, "language.html", context)
+    # return super_rendering_function(request, "language", forms.LanguagesForm(initial=data), "language.html")
+    
 
-def technology_back(request, id):
-    pass
+def technology_back(request):
+    data = request.session["technology"]
+    context = { "technology": data, "backid":1 }
+    return render(request, "technology.html", context)
+    # return super_rendering_function(request, "technology", forms.TechnologyForm(initial=data), "technology.html")
 
-def reference_back(request, id):
-    pass
+def reference_back(request):
+    # data = request.session["references"][0]
+    # return render(request, "reference.html", context)
+    # return super_rendering_function(request, "references", forms.RefrenceForm(initial=data), "reference.html")
+    return redirect("reference")
 
-def preference_back(request, id):
-    pass
+# def preference_back(request):
+#     pref = request.session["preference"][0
+    # return super_rendering_function(request, "references", forms.Languages(initial=data), "references.html")

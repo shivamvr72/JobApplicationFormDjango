@@ -7,7 +7,7 @@
 <h1> Job Application </h1>
 <h2> Register For Job </h2>
 
-{% if updateid %}
+{% if updateid or backid %}
     <form method="post" action={% url "referenceupdatedata" id=updateid %}>
 {% else %}
     <form method="post" action={% url "referencesubmit"  %}>
@@ -17,11 +17,13 @@
         {{reference.management_form}}
         <h3>References</h3>
         <div class="comformRefrence">
-        {% if updateid %}
+        {% if updateid or backid %}
         {% for obj in reference %}
         <div class="comform">
-            {% if obj.rname %}
+            {% if obj.rname %}  
+            {% if updateid %}
             <input name="id" value={{obj.id}} hidden />
+            {% endif %}
             <lable for="rname"> Rname </lable><input value={{obj.rname}} name="rname" >
             <lable for="rphone_number"> Rphone Number </lable><input value={{obj.rphone_number}} name="rphone_number" >
             <lable for="relation"> Relation </lable><input value={{obj.relation}} name="relation" >
@@ -34,7 +36,7 @@
         </div>
     </div>
     <div class="btndiv">
-        {% comment %} <a href="{% url "technology" %}" class="btn-a"><p class="btn">Previous</p></a> {% endcomment %}
+        <a href="{% url "technologyback" %}" class="btn-a">Prev</a>
         <p class="btn"><button type="submit" name="next" class="btn">Next</button></p>
     </div>
 </form>

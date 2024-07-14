@@ -15,7 +15,7 @@
     <h3>Langauage</h3>
     <div class="components" id="3">
         {{language.management_form}}
-        {% if updateid %}
+        {% if updateid or backid %}
         {% for obj in  language %}
         <div class="comformLanguage">
             {% comment %} {{obj.langauage}}
@@ -38,6 +38,7 @@
         {% endif %}
     </div>
     <div class="btndiv">
+        <a href={% url "exprienceback" %}>Prev</a>
         {% comment %} <a href="{% url "workexprience" %}" class="btn-a"><p class="btn">Previous</p></a> {% endcomment %}
         <p class="btn"><button type="submit" name="next" class="btn">Next</button></p>
     </div>

@@ -22,10 +22,9 @@
 {% endif %}
     {% csrf_token %}
     <div class="components" id="education">
-        <h3>Education</h3>
+        <h3>Education</h3>  
         {{education.management_form}}
-        
-        {% if updateid %}
+        {% if updateid or backid %}
         {% for obj in education %}
         <div class="comform">
             {% if obj.education_authority %}
@@ -50,7 +49,7 @@
     <p id="remove" class="btns">Remove</p>
     </div>
     <div class="btndiv">
-        <a href="http://127.0.0.1:8000/basicback">Prev</a>
+        <a href="{% url "basicback" %}">Prev</a>
         <p class="btn"><button type="submit" name="next" class="btn">Next</button></p>
     </div>
     </form>

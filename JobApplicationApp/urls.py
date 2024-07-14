@@ -53,12 +53,12 @@ urlpatterns = [
 
     # on click of back button
     path("basicback/", views.basic_back, name="basicback"),
-    path("educationback/<int:id>", views.education_back, name="educationback"),
-    path("exprienceback/<int:id>", views.exprience_back, name="exprienceback"),
-    path("langaugeback/<int:id>", views.langauge_back, name="langaugeback"),
-    path("technologyback/<int:id>", views.technology_back, name="technologyback"),
-    path("referenceback/<int:id>", views.reference_back, name="referenceback"),
-    path("preferenceback/<int:id>", views.preference_back, name="preferenceback"),
+    path("educationback/", views.education_back, name="educationback"),
+    path("exprienceback/", views.exprience_back, name="exprienceback"),
+    path("langaugeback/", views.langauge_back, name="langaugeback"),
+    path("technologyback/", views.technology_back, name="technologyback"),
+    path("referenceback/", views.reference_back, name="referenceback"),
+    # path("preferenceback/", views.preference_back, name="preferenceback"),
  
     # home and navigation
     path("home/", views.home, name="home"),

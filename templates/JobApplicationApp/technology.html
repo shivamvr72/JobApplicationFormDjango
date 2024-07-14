@@ -22,7 +22,7 @@
     <div class="components" id="4">
         {{reference.technology}}
         <h3>Techonology</h3>
-        {% if updateid %}
+        {% if updateid or backid %}
         {% for obj in technology %}
         <div class="comformLanguage">
             {% comment %} {{obj.technology}}
@@ -43,7 +43,8 @@
         {% endif %}
     </div>
     <div class="btndiv">
-        {% comment %} <a href="{% url "languages" %}" class="btn-a"><p class="btn">Previous</p></a> {% endcomment %}
+        
+        <a href={% url "langaugeback" %}>Prev</a>
         <p class="btn"><button type="submit" class="btn">Next</button></p>
     </div>
 </form>
